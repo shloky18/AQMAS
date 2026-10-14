@@ -1,0 +1,14 @@
+# Node.js / npm
+node_modules/
+
+# Environment variables — never commit real credentials
+backend/.env
+
+# Build output
+frontend/dist/
+
+# Editor / OS files
+.DS_Store
+Thumbs.db
+.vscode/
+*.log
