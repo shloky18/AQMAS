@@ -1,6 +1,8 @@
-// Header component — site title, status indicator, location selector, refresh button
+// Header component — site title, status indicator, active alert badge, location selector, refresh button
 
-export default function Header({ locations, selectedLocation, onLocationChange, onRefresh, backendStatus }) {
+import React from 'react'
+
+export default function Header({ locations, selectedLocation, onLocationChange, onRefresh, backendStatus, activeAlertCount = 0 }) {
     const statusLabel = {
         online: 'Backend Online',
         offline: 'Backend Offline',
@@ -11,11 +13,23 @@ export default function Header({ locations, selectedLocation, onLocationChange, 
         <header className="header">
             <div className="header-inner">
                 <div className="header-brand">
-                    <h1>🌬️ AQMAS</h1>
-                    <p>Air Quality Alert Generation System</p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <span style={{ fontSize: '1.8rem' }}>🌬️</span>
+                        <div>
+                            <h1>AQMAS</h1>
+                            <p>Air Quality Monitoring & Alert System</p>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="header-controls">
+                    {/* Active Alert Notification Badge */}
+                    {activeAlertCount > 0 && (
+                        <a href="#alerts-section" className="header-alert-pill" title="Jump to active alerts">
+                            🚨 {activeAlertCount} Active Alert{activeAlertCount > 1 ? 's' : ''}
+                        </a>
+                    )}
+
                     {/* Backend connectivity indicator */}
                     <div className="status-indicator">
                         <span className={`status-dot ${backendStatus}`} />
@@ -25,7 +39,7 @@ export default function Header({ locations, selectedLocation, onLocationChange, 
                     {/* Location selector */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                         <label htmlFor="header-location" style={{ fontSize: '0.82rem', fontWeight: 600, whiteSpace: 'nowrap' }}>
-                            📍 Location:
+                            📍 City:
                         </label>
                         <select
                             id="header-location"

@@ -514,3 +514,507 @@ input:focus, select:focus {
 
 /* ---------- Top-level page wrapper padding ---------- */
 .page-top { margin-top: 28px; }
+
+/* =====================================================
+   MODULE 3: POLLUTANTS BREAKDOWN GRID & UNAVAILABLE BADGES
+   ===================================================== */
+.pollutant-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+@media (max-width: 992px) {
+  .pollutant-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 550px) {
+  .pollutant-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.pollutant-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 105px;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.pollutant-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+.pollutant-card.unavailable {
+  background: #f8fafc;
+  border-style: dashed;
+}
+
+.pollutant-header {
+  display: flex;
+  flex-direction: column;
+}
+.pollutant-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+.pollutant-desc {
+  font-size: 0.70rem;
+  color: var(--color-text-muted);
+}
+
+.pollutant-body {
+  margin-top: 10px;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.pollutant-value {
+  font-size: 1.45rem;
+  font-weight: 800;
+  line-height: 1;
+}
+.pollutant-unit {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+}
+.pollutant-status.high {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  background: var(--color-unhealthy-bg);
+  color: var(--color-unhealthy);
+  border-radius: 4px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.pollutant-na-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.pollutant-na-badge {
+  display: inline-block;
+  background: #e2e8f0;
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  width: fit-content;
+}
+.pollutant-na-text {
+  font-size: 0.70rem;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+/* =====================================================
+   MODULE 3: FILTER BUTTON GROUPS (DAY, WEEK, MONTH)
+   ===================================================== */
+.filter-button-group {
+  display: inline-flex;
+  background: #f1f5f9;
+  padding: 3px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+.btn-filter {
+  background: transparent;
+  border: none;
+  padding: 6px 12px;
+  font-size: 0.80rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.btn-filter:hover {
+  color: var(--color-text);
+}
+.btn-filter.active {
+  background: var(--color-surface);
+  color: var(--color-primary);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* =====================================================
+   MODULE 3: HISTORICAL SVG CHART & STATS BAR
+   ===================================================== */
+.chart-stats-bar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border-radius: var(--radius-md);
+  border: 1px solid #e2e8f0;
+}
+.stat-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+}
+.stat-label {
+  color: var(--color-text-muted);
+}
+.stat-val {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.chart-tooltip {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(15, 23, 42, 0.92);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  pointer-events: none;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+  animation: fadeIn 0.15s ease;
+  z-index: 10;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* =====================================================
+   MODULE 3: MULTI-LOCATION COMPARISON & REGIONAL MAP
+   ===================================================== */
+.loc-chip {
+  padding: 6px 12px;
+  border-radius: 100px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.loc-chip:hover {
+  border-color: var(--color-primary);
+}
+.loc-chip.selected {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+  color: var(--color-primary-dark);
+}
+
+.comparison-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+@media (max-width: 800px) {
+  .comparison-cards-grid { grid-template-columns: 1fr; }
+}
+
+.comparison-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+}
+.comp-pollutants-row {
+  display: flex;
+  gap: 16px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #f1f5f9;
+}
+.comp-sub-label {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+}
+
+.map-view-wrapper {
+  background: #f8fafc;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.map-canvas-container {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.map-svg {
+  width: 100%;
+  height: auto;
+  max-height: 520px;
+  display: block;
+}
+
+.map-stations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.station-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.station-item:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+.station-item.active {
+  border-color: var(--color-primary);
+  background: #eff6ff;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+.india-states-group path {
+  cursor: pointer;
+  transition: fill 0.15s ease, stroke 0.15s ease;
+}
+.india-states-group path:hover {
+  fill: #cbd5e1;
+}
+
+/* Dark Mode / Fullscreen Vector State Boundaries */
+.india-states-group.dark path {
+  fill: #1e293b;
+  stroke: #334155;
+  stroke-width: 0.9;
+  cursor: pointer;
+  transition: fill 0.18s ease, stroke 0.18s ease;
+}
+.india-states-group.dark path:hover {
+  fill: #2563eb;
+  fill-opacity: 0.35;
+  stroke: #60a5fa;
+}
+
+/* =====================================================
+   FULLSCREEN GIS OVERLAY (MODULE 3)
+   ===================================================== */
+.map-fullscreen-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #090d16;
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: inherit;
+  color: #f8fafc;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.map-fullscreen-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #1e293b;
+}
+
+.map-fullscreen-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.map-fullscreen-svg-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+  background: radial-gradient(circle at center, #111827 0%, #090d16 100%);
+}
+
+.map-fullscreen-sidebar {
+  width: 350px;
+  background: rgba(15, 23, 42, 0.94);
+  backdrop-filter: blur(10px);
+  border-left: 1px solid #1e293b;
+  padding: 18px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.station-fs-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.station-fs-card:hover {
+  border-color: #3b82f6;
+  background: #25334d;
+  transform: translateY(-1px);
+}
+.station-fs-card.active {
+  border-color: #3b82f6;
+  background: #1e3a8a;
+  box-shadow: 0 0 14px rgba(59, 130, 246, 0.3);
+}
+
+@media (max-width: 900px) {
+  .map-fullscreen-body {
+    flex-direction: column;
+  }
+  .map-fullscreen-sidebar {
+    width: 100%;
+    max-height: 220px;
+    border-left: none;
+    border-top: 1px solid #1e293b;
+  }
+}
+
+/* =====================================================
+   MODULE 5: ALERT FEED & PLAIN-LANGUAGE ADVISORIES
+   ===================================================== */
+.header-alert-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background: var(--color-unhealthy-bg);
+  color: var(--color-unhealthy);
+  border: 1px solid #fca5a5;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-decoration: none;
+  animation: pulse 1.5s infinite;
+}
+
+.alert-type-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.alert-type-badge.breach {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+.alert-type-badge.spike {
+  background: #fef08a;
+  color: #854d0e;
+  border: 1px solid #fde047;
+}
+.alert-type-badge.disaster {
+  background: #ede9fe;
+  color: #6b21a8;
+}
+
+.alert-card.spike-card {
+  border-left: 5px solid #eab308;
+  background: #fefce8;
+}
+
+.alert-health-advice {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.85);
+  border-left: 3px solid var(--color-primary);
+  border-radius: 4px;
+  font-size: 0.82rem;
+  color: #1e293b;
+  line-height: 1.45;
+}
+
+/* Disaster alerts section */
+.disaster-section-box {
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  background: #faf5ff;
+  border: 1px solid #d8b4fe;
+  border-radius: var(--radius-md);
+}
+.disaster-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.disaster-card {
+  background: #ffffff;
+  border: 1px solid #e9d5ff;
+  border-radius: var(--radius-sm);
+  padding: 12px;
+}
+.disaster-tag {
+  background: #f3e8ff;
+  color: #7e22ce;
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.priority-badge {
+  background: #ef4444;
+  color: white;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 100px;
+  text-transform: uppercase;
+}
+.disaster-advice {
+  margin-top: 8px;
+  font-size: 0.80rem;
+  color: #334155;
+  background: #f8fafc;
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
+/* Quick Viva Demo Presets Bar */
+.demo-presets-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px 14px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: var(--radius-sm);
+}
+

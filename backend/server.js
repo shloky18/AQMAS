@@ -99,6 +99,11 @@ async function handleRequest(req, res) {
             return await routes.createReading(req, res);
         }
 
+        // GET /api/air-quality/compare
+        if (method === 'GET' && pathname === '/api/air-quality/compare') {
+            return await routes.getCompareReadings(req, res, parsedUrl);
+        }
+
         // ----- Threshold routes -----
 
         // GET /api/thresholds
@@ -116,6 +121,11 @@ async function handleRequest(req, res) {
         // GET /api/alerts
         if (method === 'GET' && pathname === '/api/alerts') {
             return await routes.getAlerts(req, res, parsedUrl);
+        }
+
+        // GET /api/disaster-alerts
+        if (method === 'GET' && pathname === '/api/disaster-alerts') {
+            return await routes.getDisasterAlerts(req, res, parsedUrl);
         }
 
         // PATCH /api/alerts/:id/acknowledge

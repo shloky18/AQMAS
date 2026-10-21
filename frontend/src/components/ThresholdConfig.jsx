@@ -1,22 +1,25 @@
-// ThresholdConfig — lets user set/update AQI threshold for a location
+// ThresholdConfig.jsx — AQI threshold configuration (Module 5)
+// Designed for a single-user application: persists to MySQL, validates input, and controls alert generation.
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 
-export default function ThresholdConfig({ locations, selectedLocation, apiBase }) {
+export default function ThresholdConfig({ locations, selectedLocation, apiBase, onThresholdUpdated }) {
     const [location, setLocation] = useState(selectedLocation)
     const [threshold, setThreshold] = useState(100)
     const [enabled, setEnabled] = useState(true)
     const [loading, setLoading] = useState(false)
     const [saving, setSaving] = useState(false)
-    const [message, setMessage] = useState(null) // { type, text }
+    const [message, setMessage] = useState(null)
 
-    // Load threshold when location changes
+    // Sync when primary location changes
     useEffect(() => {
         setLocation(selectedLocation)
     }, [selectedLocation])
 
     useEffect(() => {
-        fetchThreshold(location)
+        if (location) {
+            fetchThreshold(location)
+        }
     }, [location])
 
     async function fetchThreshold(loc) {
@@ -31,7 +34,7 @@ export default function ThresholdConfig({ locations, selectedLocation, apiBase }
                 setEnabled(data.enabled === 1 || data.enabled === true)
             }
         } catch {
-            setMessage({ type: 'error', text: 'Could not load threshold. Is the backend running?' })
+            setMessage({ type: 'error', text: 'Could not load threshold from backend.' })
         } finally {
             setLoading(false)
         }
@@ -42,7 +45,7 @@ export default function ThresholdConfig({ locations, selectedLocation, apiBase }
         if (!location) return
         const val = parseInt(threshold, 10)
         if (isNaN(val) || val < 0) {
-            setMessage({ type: 'error', text: 'Threshold must be a non-negative number.' })
+            setMessage({ type: 'error', text: 'Threshold must be a non-negative integer.' })
             return
         }
         setSaving(true)
@@ -55,23 +58,37 @@ export default function ThresholdConfig({ locations, selectedLocation, apiBase }
             })
             const data = await res.json()
             if (res.ok) {
-                setMessage({ type: 'success', text: `✅ Threshold saved for ${location}: AQI > ${val} (monitoring ${enabled ? 'enabled' : 'disabled'})` })
+                setMessage({
+                    type: 'success',
+                    text: `✅ Configuration saved for ${location}: AQI alert threshold = ${val} (Monitoring ${enabled ? 'ACTIVE' : 'DISABLED'})`,
+                })
+                if (onThresholdUpdated) onThresholdUpdated()
             } else {
                 setMessage({ type: 'error', text: data.error || 'Failed to save threshold.' })
             }
         } catch {
-            setMessage({ type: 'error', text: 'Network error. Check if backend is running.' })
+            setMessage({ type: 'error', text: 'Network error. Verify that the backend is running.' })
         } finally {
             setSaving(false)
         }
     }
 
     return (
-        <section className="section">
-            <h2 className="section-title">
-                <span className="icon">⚙️</span>
-                AQI Threshold Configuration
-            </h2>
+        <section className="section" id="threshold-config-section">
+            <div className="section-header">
+                <div>
+                    <h2 className="section-title">
+                        <span className="icon">⚙️</span>
+                        AQI Alert Threshold Configuration
+                    </h2>
+                    <span className="text-muted" style={{ fontSize: '0.82rem' }}>
+                        Single-account alert rule engine — defines when automated warnings are dispatched
+                    </span>
+                </div>
+                <span className="status-pill acknowledged" style={{ fontSize: '0.72rem' }}>
+                    Single-Account Mode
+                </span>
+            </div>
 
             {message && (
                 <div className={`alert-banner ${message.type}`}>
@@ -83,20 +100,22 @@ export default function ThresholdConfig({ locations, selectedLocation, apiBase }
                 <div className="form-grid-2">
                     {/* Location selector */}
                     <div className="form-group mb-0">
-                        <label htmlFor="thresh-location">Location</label>
+                        <label htmlFor="thresh-location">Target Location</label>
                         <select
                             id="thresh-location"
                             value={location}
                             onChange={(e) => setLocation(e.target.value)}
                             disabled={loading}
                         >
-                            {locations.map((l) => <option key={l} value={l}>{l}</option>)}
+                            {locations.map((l) => (
+                                <option key={l} value={l}>{l}</option>
+                            ))}
                         </select>
                     </div>
 
                     {/* Threshold value */}
                     <div className="form-group mb-0">
-                        <label htmlFor="thresh-value">AQI Threshold Value</label>
+                        <label htmlFor="thresh-value">AQI Warning Threshold (0 - 500)</label>
                         <input
                             id="thresh-value"
                             type="number"
@@ -106,18 +125,21 @@ export default function ThresholdConfig({ locations, selectedLocation, apiBase }
                             onChange={(e) => setThreshold(e.target.value)}
                             disabled={loading}
                             placeholder="e.g. 100"
+                            required
                         />
                     </div>
                 </div>
 
-                {/* Enable toggle */}
+                {/* Enable / Disable toggle */}
                 <div className="toggle-row mt-16">
                     <div>
-                        <div className="toggle-label-text">Threshold Monitoring</div>
-                        <div className="text-muted" style={{ fontSize: '0.8rem', marginTop: 2 }}>
+                        <div className="toggle-label-text">
+                            Threshold Monitoring State: <strong>{enabled ? 'ENABLED' : 'DISABLED'}</strong>
+                        </div>
+                        <div className="text-muted" style={{ fontSize: '0.80rem', marginTop: 2 }}>
                             {enabled
-                                ? 'Alerts will be generated when AQI exceeds the threshold above.'
-                                : 'Monitoring is disabled. No alerts will be generated.'}
+                                ? 'Automated alerts will trigger whenever a newly registered reading exceeds this threshold.'
+                                : 'Alert generation is suppressed for this location. Readings will be logged without triggering alerts.'}
                         </div>
                     </div>
                     <label className="toggle-switch" id="toggle-monitoring">
@@ -130,16 +152,16 @@ export default function ThresholdConfig({ locations, selectedLocation, apiBase }
                     </label>
                 </div>
 
-                <div className="row">
+                <div className="row" style={{ marginTop: 16 }}>
                     <button
                         id="btn-save-threshold"
                         type="submit"
                         className="btn btn-primary"
                         disabled={saving || loading}
                     >
-                        {saving ? 'Saving…' : '💾 Save Threshold'}
+                        {saving ? 'Saving to Database…' : '💾 Save Threshold Configuration'}
                     </button>
-                    {loading && <span className="text-muted">Loading current threshold…</span>}
+                    {loading && <span className="text-muted" style={{ fontSize: '0.85rem' }}>Loading settings from MySQL…</span>}
                 </div>
             </form>
         </section>

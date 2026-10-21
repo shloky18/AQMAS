@@ -1,14 +1,20 @@
 # Node.js / npm
 node_modules/
+package-lock.json
 
 # Environment variables — never commit real credentials
+.env
+*.env
 backend/.env
 
 # Build output
+dist/
+.dist/
 frontend/dist/
 
 # Editor / OS files
 .DS_Store
 Thumbs.db
 .vscode/
+.idea/
 *.log
