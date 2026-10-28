@@ -124,14 +124,14 @@ export default function TestReading({ locations, selectedLocation, apiBase, onSu
                         Simulate Reading & Demonstration Console
                     </h2>
                     <span className="text-muted" style={{ fontSize: '0.82rem' }}>
-                        Simulate incoming sensor telemetry for college viva evaluation without requiring paid IoT gateways
+                        Simulate incoming sensor telemetry
                     </span>
                 </div>
             </div>
 
             {/* Quick Demo Scenario Presets */}
             <div className="demo-presets-bar">
-                <span style={{ fontSize: '0.82rem', fontWeight: 600 }}>Viva Test Presets:</span>
+                <span style={{ fontSize: '0.82rem', fontWeight: 600 }}> Test Presets:</span>
                 <button
                     type="button"
                     className="btn btn-sm btn-secondary"
@@ -310,7 +310,7 @@ export default function TestReading({ locations, selectedLocation, apiBase, onSu
                         {loading ? 'Submitting & Evaluating…' : '📤 Submit Telemetry Reading'}
                     </button>
                     <span className="text-muted" style={{ fontSize: '0.80rem' }}>
-                        Backend will evaluate threshold limits and spike criteria in MySQL atomically.
+                        Reading Evaluated
                     </span>
                 </div>
             </form>
